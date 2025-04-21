@@ -73,7 +73,7 @@ const floor = new THREE.Mesh(
     displacementBias: -0.2,
   }),
 );
-console.log(floor);
+//console.log(floor);
 /*
 gui
   .add(floor.material, "displacementScale")
@@ -91,13 +91,32 @@ gui
 scene.add(floor);
 floor.rotation.x = -Math.PI * 0.5;
 
+// Wall
+const wallColorTexture = textureLoader.load(
+  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_diff_1k.jpg",
+);
+wallColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+const wallARMTexture = textureLoader.load(
+  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_arm_1k.jpg",
+);
+const wallNormalTexture = textureLoader.load(
+  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_nor_gl_1k.jpg",
+);
+
 const houseGroup = new THREE.Group();
 scene.add(houseGroup);
 
 // Walls
 const walls = new THREE.Mesh(
   new THREE.BoxGeometry(4, 2.5, 4),
-  new THREE.MeshStandardMaterial({}),
+  new THREE.MeshStandardMaterial({
+    map: wallColorTexture,
+    aoMap: wallARMTexture,
+    roughnessMap: wallARMTexture,
+    metalnessMap: wallARMTexture,
+    normalMap: wallNormalTexture,
+  }),
 );
 // console.log(walls.geometry.parameters.height);
 walls.position.y += walls.geometry.parameters.height / 2;
