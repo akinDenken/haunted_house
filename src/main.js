@@ -53,6 +53,39 @@ floorDisplacementTexture.repeat.set(8, 8);
 floorDisplacementTexture.wrapS = THREE.RepeatWrapping;
 floorDisplacementTexture.wrapT = THREE.RepeatWrapping;
 
+// Wall
+const wallColorTexture = textureLoader.load(
+  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_diff_1k.jpg",
+);
+wallColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+const wallARMTexture = textureLoader.load(
+  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_arm_1k.jpg",
+);
+const wallNormalTexture = textureLoader.load(
+  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_nor_gl_1k.jpg",
+);
+
+// Roof
+const roofColorTexture = textureLoader.load(
+  "/roof/roof_slates_02_1k/roof_slates_02_diff_1k.jpg",
+);
+roofColorTexture.colorSpace = THREE.SRGBColorSpace;
+const roofARMTexture = textureLoader.load(
+  "/roof/roof_slates_02_1k/roof_slates_02_arm_1k.jpg",
+);
+const roofNormalTexture = textureLoader.load(
+  "/roof/roof_slates_02_1k/roof_slates_02_nor_gl_1k.jpg",
+);
+
+roofColorTexture.repeat.set(3, 1);
+roofARMTexture.repeat.set(3, 1);
+roofNormalTexture.repeat.set(3, 1);
+
+roofColorTexture.wrapS = THREE.RepeatWrapping;
+roofARMTexture.wrapS = THREE.RepeatWrapping;
+roofNormalTexture.wrapS = THREE.RepeatWrapping;
+
 /**
  * House
  */
@@ -91,19 +124,6 @@ gui
 scene.add(floor);
 floor.rotation.x = -Math.PI * 0.5;
 
-// Wall
-const wallColorTexture = textureLoader.load(
-  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_diff_1k.jpg",
-);
-wallColorTexture.colorSpace = THREE.SRGBColorSpace;
-
-const wallARMTexture = textureLoader.load(
-  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_arm_1k.jpg",
-);
-const wallNormalTexture = textureLoader.load(
-  "/wall/castle_brick_broken_06_1k/castle_brick_broken_06_nor_gl_1k.jpg",
-);
-
 const houseGroup = new THREE.Group();
 scene.add(houseGroup);
 
@@ -125,7 +145,13 @@ houseGroup.add(walls);
 // Roof
 const roof = new THREE.Mesh(
   new THREE.ConeGeometry(3.5, 1.5, 4),
-  new THREE.MeshStandardMaterial({}),
+  new THREE.MeshStandardMaterial({
+    map: roofColorTexture,
+    aoMap: roofARMTexture,
+    roughnessMap: roofARMTexture,
+    metalnessMap: roofARMTexture,
+    normalMap: roofNormalTexture,
+  }),
 );
 roof.position.y +=
   walls.geometry.parameters.height + roof.geometry.parameters.height / 2;
