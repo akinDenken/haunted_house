@@ -126,6 +126,19 @@ graveColorTexture.wrapS = THREE.RepeatWrapping;
 graveARMTexture.wrapS = THREE.RepeatWrapping;
 graveNormalTexture.wrapS = THREE.RepeatWrapping;
 
+// Door
+const doorColorTexture = textureLoader.load("/door/color.jpg");
+doorColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+const doorAlphaTexture = textureLoader.load("/door/alpha.jpg");
+const doorAmbientOcclusionTexture = textureLoader.load(
+  "/door/ambientOcclusion.jpg",
+);
+const doorHeightTexture = textureLoader.load("/door/height.jpg");
+const doorNormalTexture = textureLoader.load("/door/normal.jpg");
+const doorMetalnessTexture = textureLoader.load("/door/metalness.jpg");
+const doorRoughnessTexture = textureLoader.load("/door/roughness.jpg");
+
 /**
  * House
  */
@@ -143,7 +156,7 @@ const floor = new THREE.Mesh(
     normalMap: floorNormalTexture,
     displacementMap: floorDisplacementTexture,
     displacementScale: 0.3,
-    displacementBias: -0.2,
+    displacementBias: -0.11,
   }),
 );
 //console.log(floor);
@@ -200,8 +213,19 @@ houseGroup.add(roof);
 
 // Door
 const door = new THREE.Mesh(
-  new THREE.PlaneGeometry(2.2, 2.2),
-  new THREE.MeshStandardMaterial({ color: "#ff0000" }),
+  new THREE.PlaneGeometry(2.2, 2.2, 100, 100),
+  new THREE.MeshStandardMaterial({
+    map: doorColorTexture,
+    transparent: true,
+    alphaMap: doorAlphaTexture,
+    aoMap: doorAmbientOcclusionTexture,
+    roughnessMap: doorRoughnessTexture,
+    metalnessMap: doorMetalnessTexture,
+    normalMap: doorNormalTexture,
+    displacementMap: doorHeightTexture,
+    displacementScale: 0.15,
+    displacementBias: -0.04,
+  }),
 );
 // console.log(walls.geometry.parameters);
 door.position.z = walls.geometry.parameters.depth / 2 + 0.001;
@@ -220,10 +244,10 @@ const bushMaterial = new THREE.MeshStandardMaterial({
 });
 
 const bushPositions = [
-  [0.8, 0.2, 2.2],
-  [1.4, 0.1, 2.1],
-  [-0.8, 0.1, 2.2],
-  [-1, 0.05, 2.6],
+  [1.0, 0.2, 2.2],
+  [1.7, 0.1, 2.1],
+  [-0.9, 0.1, 2.2],
+  [-1.1, 0.05, 2.6],
 ];
 const bushScales = [0.5, 0.25, 0.4, 0.15];
 for (let i = 0; i < bushPositions.length; i++) {
