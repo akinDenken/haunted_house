@@ -455,12 +455,18 @@ scene.fog = new THREE.FogExp2("#04343f", 0.1);
  * Animate
  */
 const timer = new Timer();
+let previousTime = 0;
 
 const tick = () => {
   // Timer
   timer.update();
   const elapsedTime = timer.getElapsed();
-
+  const deltaTime = elapsedTime - previousTime;
+  previousTime = elapsedTime;
+  // Flicker light
+  if (Math.sin(elapsedTime * 2 * Math.PI * 0.3) > 0.9) {
+    doorLight.intensity = Math.sin(elapsedTime * 60) * 5;
+  } else doorLight.intensity = 5;
   // Ghost
   const ghost1Angle = elapsedTime * 0.5;
   ghost1.position.x = Math.cos(ghost1Angle) * 4.5;
