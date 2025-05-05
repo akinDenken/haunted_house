@@ -6,6 +6,16 @@ import { Timer } from "three/addons/misc/Timer.js";
 import GUI from "lil-gui";
 import { color } from "three/tsl";
 import { PCFSoftShadowMap } from "three";
+import { GLTFLoader, DRACOLoader } from "three/addons";
+
+/*
+Models Loaders
+*/
+const gltfLoader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+
+dracoLoader.setDecoderPath("/draco/");
+gltfLoader.setDRACOLoader(dracoLoader);
 
 /**
  * Base
@@ -310,6 +320,31 @@ for (let i = 0; i < 30; i++) {
   gravesGroup.add(grave);
 }
 
+/*
+Model
+*/
+let duck = null;
+const chosenGrave = Math.floor(Math.random() * gravesGroup.children.length);
+// console.log(chosenGrave);
+
+// console.log(gravesGroup.children[chosenGrave].geometry.parameters);
+// console.log(gravesGroup.children[chosenGrave].position);
+
+gltfLoader.load("/models/Duck/glTF-Draco/Duck.gltf", (gltf) => {
+  gltf.scene.position.set(
+    gravesGroup.children[chosenGrave].position.x,
+    gravesGroup.children[chosenGrave].position.y + 0.37,
+    gravesGroup.children[chosenGrave].position.z,
+  ); // For some reason it is not working to directly add position
+  duck = gltf.scene.children[0];
+  duck.scale.set(0.003, 0.003, 0.003);
+  // gltf.scene.scale.set(0.15, 0.15, 0.15);
+
+  gltf.scene.rotation.set(...gravesGroup.children[chosenGrave].rotation);
+  scene.add(gltf.scene);
+  // console.log(gltf.scene);
+});
+
 /**
  * Lights
  */
@@ -404,6 +439,11 @@ walls.receiveShadow = true;
 roof.castShadow = true;
 floor.receiveShadow = true;
 
+if (duck) {
+  duck.castShadow = true;
+  duck.receiveShadow = true;
+}
+
 //console.log(gravesGroup);
 for (const grave of gravesGroup.children) {
   grave.castShadow = true;
@@ -431,6 +471,12 @@ ghost2.shadow.camera.far = 10;
 ghost3.shadow.mapSize.width = 256;
 ghost3.shadow.mapSize.height = 256;
 ghost3.shadow.camera.far = 10;
+
+if (duck) {
+  duck.shadow.mapSize.width = 256;
+  duck.shadow.mapSize.height = 256;
+  duck.shadow.camera.far = 10;
+}
 
 /*
 Sky
